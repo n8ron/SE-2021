@@ -1,10 +1,11 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.5.0"
+    kotlin("jvm") version "1.5.31"
+    id("org.jlleitschuh.gradle.ktlint") version "10.2.0"
 }
 
-group = "me.n8ron"
+group = "ru.hse"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -19,6 +20,10 @@ tasks.test {
     useJUnit()
 }
 
-tasks.withType<KotlinCompile>() {
+ktlint {
+    enableExperimentalRules.set(true)
+}
+
+tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
 }
