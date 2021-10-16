@@ -29,19 +29,31 @@ jobs:
 
   test:
     needs: build
-    runs-on: ubunutu-latest
+    runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+      - name: Setup Java JDK
+        uses: actions/setup-java@v2.3.1
+        with:
+          java-version: 11
+          distribution: adopt
+          java-package: jre
+      - name: Cache Gradle packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle
       - name: Run tests with Gradle
         run: |
           chmod +x gradlew
           ./gradlew test
-          
+
   lint:
     needs: build
-    runs-on: ubunutu-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Run tests with Gradle
         run: |
           chmod +x gradlew
           ./gradlew ktlintCheck
-          
