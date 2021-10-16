@@ -1,3 +1,5 @@
+package ru.hse.plameet.core
+
 interface Constraint {
     fun calcPenalty(schedule: Schedule): Double
 }
@@ -21,15 +23,6 @@ class AvailabilityConstraint : RequiredConstraint {
     }
 }
 
-class OrderConstraint : BooleanConstraint {
-    override val weight: Double
-        get() = TODO("Not yet implemented")
-
-    override fun isSatisfied(schedule: Schedule): Boolean {
-        TODO("Not yet implemented")
-    }
-}
-
 class SlotsConstraint : BooleanConstraint {
     override val weight: Double
         get() = TODO("Not yet implemented")
@@ -38,7 +31,3 @@ class SlotsConstraint : BooleanConstraint {
         TODO("Not yet implemented")
     }
 }
-
-/**
- * And so on
- */

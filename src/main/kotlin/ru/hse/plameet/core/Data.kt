@@ -1,3 +1,5 @@
+package ru.hse.plameet.core
+
 @JvmInline
 value class User(val id: Int)
 
