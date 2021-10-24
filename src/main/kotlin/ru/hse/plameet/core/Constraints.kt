@@ -23,7 +23,7 @@ class AvailabilityConstraint : RequiredConstraint {
     }
 }
 
-class SlotsConstraint : BooleanConstraint {
+class SlotsConstraint(slots: TimeSlots) : BooleanConstraint {
     override val weight: Double
         get() = TODO("Not yet implemented")
 

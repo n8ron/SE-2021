@@ -13,4 +13,6 @@ data class Event(val id: Int, val duration: Duration, val participants: List<Use
 
 data class TimedEvent(val event: Event, val time: TimeStamp)
 
+data class TimeSlots(val slots: List<Pair<Duration, TimeStamp>>)
+
 data class Schedule(val events: List<TimedEvent>)
