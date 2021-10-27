@@ -1,6 +1,9 @@
 package ru.hse.plameet.core
 
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertDoesNotThrow
+import org.junit.jupiter.api.assertThrows
+import java.lang.IllegalStateException
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
@@ -55,4 +58,47 @@ class ConstraintsTest {
         )
         assertTrue { constraint.isSatisfied(correctSchedule) }
     }
+
+    @Test
+    fun slotsConstraintIntersectionsTest() {
+        var intersectSlots = TimeSlots(
+            listOf(
+                Pair(Duration(2), TimeStamp(0)),
+                Pair(Duration(1), TimeStamp(2)),
+            )
+        )
+        assertThrows<IllegalStateException> { SlotsConstraint(intersectSlots)}
+
+        intersectSlots = TimeSlots(
+            listOf(
+                Pair(Duration(2), TimeStamp(0)),
+                Pair(Duration(4), TimeStamp(4)),
+                Pair(Duration(1), TimeStamp(7)),
+                Pair(Duration(1), TimeStamp(3))
+            )
+        )
+        assertThrows<IllegalStateException> { SlotsConstraint(intersectSlots)}
+
+        intersectSlots = TimeSlots(
+            listOf(
+                Pair(Duration(2), TimeStamp(0)),
+                Pair(Duration(4), TimeStamp(4)),
+                Pair(Duration(1), TimeStamp(5)),
+                Pair(Duration(1), TimeStamp(3))
+            )
+        )
+        assertThrows<IllegalStateException> { SlotsConstraint(intersectSlots)}
+
+        val correctSlots = TimeSlots(
+            listOf(
+                Pair(Duration(2), TimeStamp(0)),
+                Pair(Duration(5), TimeStamp(3)),
+                Pair(Duration(1), TimeStamp(9)),
+                Pair(Duration(2), TimeStamp(11)),
+            )
+        )
+
+        assertDoesNotThrow {SlotsConstraint(correctSlots)}
+    }
+
 }

@@ -19,6 +19,7 @@ dependencies {
 
 tasks.test {
     useJUnit()
+    useJUnitPlatform()
 }
 
 ktlint {
