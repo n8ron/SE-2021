@@ -57,6 +57,53 @@ class ConstraintsTest {
             )
         )
         assertTrue { constraint.isSatisfied(correctSchedule) }
+
+        correctSchedule = Schedule(
+            listOf(
+                TimedEvent(Event(0, Duration(1), listOf()), TimeStamp(0)),
+                TimedEvent(Event(0, Duration(1), listOf()), TimeStamp(1)),
+                TimedEvent(Event(0, Duration(1), listOf()), TimeStamp(3)),
+                TimedEvent(Event(0, Duration(2), listOf()), TimeStamp(5)),
+                TimedEvent(Event(0, Duration(2), listOf()), TimeStamp(7)),
+                TimedEvent(Event(0, Duration(1), listOf()), TimeStamp(10)),
+            )
+        )
+        assertTrue { constraint.isSatisfied(correctSchedule) }
+
+
+        var scheduleWithIntersections = Schedule(
+            listOf(
+                TimedEvent(Event(0, Duration(1), listOf()), TimeStamp(0)),
+                TimedEvent(Event(0, Duration(1), listOf()), TimeStamp(0)),
+            )
+        )
+        assertFalse { constraint.isSatisfied(scheduleWithIntersections) }
+
+        scheduleWithIntersections = Schedule(
+            listOf(
+                TimedEvent(Event(0, Duration(2), listOf()), TimeStamp(0)),
+                TimedEvent(Event(0, Duration(1), listOf()), TimeStamp(1)),
+            )
+        )
+        assertFalse { constraint.isSatisfied(scheduleWithIntersections) }
+
+        scheduleWithIntersections = Schedule(
+            listOf(
+                TimedEvent(Event(0, Duration(1), listOf()), TimeStamp(0)),
+                TimedEvent(Event(0, Duration(2), listOf()), TimeStamp(0)),
+            )
+        )
+        assertFalse { constraint.isSatisfied(scheduleWithIntersections) }
+
+        scheduleWithIntersections = Schedule(
+            listOf(
+                TimedEvent(Event(0, Duration(1), listOf()), TimeStamp(0)),
+                TimedEvent(Event(0, Duration(2), listOf()), TimeStamp(5)),
+                TimedEvent(Event(0, Duration(2), listOf()), TimeStamp(6)),
+            )
+        )
+        assertFalse { constraint.isSatisfied(scheduleWithIntersections) }
+
     }
 
     @Test
@@ -67,7 +114,7 @@ class ConstraintsTest {
                 Pair(Duration(1), TimeStamp(2)),
             )
         )
-        assertThrows<IllegalStateException> { SlotsConstraint(intersectSlots)}
+        assertThrows<IllegalStateException> { SlotsConstraint(intersectSlots) }
 
         intersectSlots = TimeSlots(
             listOf(
@@ -77,7 +124,7 @@ class ConstraintsTest {
                 Pair(Duration(1), TimeStamp(3))
             )
         )
-        assertThrows<IllegalStateException> { SlotsConstraint(intersectSlots)}
+        assertThrows<IllegalStateException> { SlotsConstraint(intersectSlots) }
 
         intersectSlots = TimeSlots(
             listOf(
@@ -87,7 +134,7 @@ class ConstraintsTest {
                 Pair(Duration(1), TimeStamp(3))
             )
         )
-        assertThrows<IllegalStateException> { SlotsConstraint(intersectSlots)}
+        assertThrows<IllegalStateException> { SlotsConstraint(intersectSlots) }
 
         val correctSlots = TimeSlots(
             listOf(
@@ -98,7 +145,7 @@ class ConstraintsTest {
             )
         )
 
-        assertDoesNotThrow {SlotsConstraint(correctSlots)}
+        assertDoesNotThrow { SlotsConstraint(correctSlots) }
     }
 
 }
