@@ -7,11 +7,10 @@ import java.lang.IllegalStateException
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-
 class ConstraintsTest {
 
     @Test
-    fun slotsConstraintTest() {
+    fun slotsConstraintIsSatisfiedTest() {
         val slots = TimeSlots(
             listOf(
                 Pair(Duration(2), TimeStamp(0)),
@@ -60,16 +59,14 @@ class ConstraintsTest {
 
         correctSchedule = Schedule(
             listOf(
-                TimedEvent(Event(0, Duration(1), listOf()), TimeStamp(0)),
                 TimedEvent(Event(0, Duration(1), listOf()), TimeStamp(1)),
                 TimedEvent(Event(0, Duration(1), listOf()), TimeStamp(3)),
-                TimedEvent(Event(0, Duration(2), listOf()), TimeStamp(5)),
+                TimedEvent(Event(0, Duration(1), listOf()), TimeStamp(5)),
                 TimedEvent(Event(0, Duration(2), listOf()), TimeStamp(7)),
                 TimedEvent(Event(0, Duration(1), listOf()), TimeStamp(10)),
             )
         )
         assertTrue { constraint.isSatisfied(correctSchedule) }
-
 
         var scheduleWithIntersections = Schedule(
             listOf(
@@ -103,7 +100,6 @@ class ConstraintsTest {
             )
         )
         assertFalse { constraint.isSatisfied(scheduleWithIntersections) }
-
     }
 
     @Test
@@ -148,4 +144,49 @@ class ConstraintsTest {
         assertDoesNotThrow { SlotsConstraint(correctSlots) }
     }
 
+    @Test
+    fun slotConstraintManyEventInOneSlotTest() {
+        val slots = TimeSlots(
+            listOf(
+                Pair(Duration(3), TimeStamp(0)),
+                Pair(Duration(2), TimeStamp(4)),
+                Pair(Duration(4), TimeStamp(8)),
+                Pair(Duration(1), TimeStamp(13))
+            )
+        )
+
+        val constraint = SlotsConstraint(slots)
+
+        var incorrectSchedule = Schedule(
+            listOf(
+                TimedEvent(Event(0, Duration(2), listOf()), TimeStamp(8)),
+                TimedEvent(Event(0, Duration(1), listOf()), TimeStamp(11)),
+            )
+        )
+
+        assertFalse { constraint.isSatisfied(incorrectSchedule) }
+
+        val correctSchedule = Schedule(
+            listOf(
+                TimedEvent(Event(0, Duration(4), listOf()), TimeStamp(8)),
+                TimedEvent(Event(0, Duration(2), listOf()), TimeStamp(4)),
+                TimedEvent(Event(0, Duration(3), listOf()), TimeStamp(0)),
+                TimedEvent(Event(0, Duration(1), listOf()), TimeStamp(13))
+            )
+        )
+
+        assertTrue { constraint.isSatisfied(correctSchedule) }
+
+        incorrectSchedule = Schedule(
+            listOf(
+                TimedEvent(Event(0, Duration(4), listOf()), TimeStamp(8)),
+                TimedEvent(Event(0, Duration(1), listOf()), TimeStamp(2)),
+                TimedEvent(Event(0, Duration(2), listOf()), TimeStamp(4)),
+                TimedEvent(Event(0, Duration(1), listOf()), TimeStamp(0)),
+                TimedEvent(Event(0, Duration(1), listOf()), TimeStamp(13))
+            )
+        )
+
+        assertFalse { constraint.isSatisfied(incorrectSchedule) }
+    }
 }
