@@ -1,5 +1,7 @@
 package ru.hse.plameet.core
 
+import java.lang.IllegalStateException
+
 interface Constraint {
     fun calcPenalty(schedule: Schedule): Double
 }
@@ -32,7 +34,14 @@ class SlotsConstraint(slots: TimeSlots) : BooleanConstraint {
     )
 
     init {
-        // TODO Validate sortedSlots should be non-intersection
+        // Validating that the slots don't intersect
+        var prevSlot: Pair<Duration, TimeStamp>? = null
+        for (slot in sortedSlots.slots) {
+            if (prevSlot != null && slot.second.units <= prevSlot.first.units + prevSlot.second.units) {
+                throw IllegalStateException("Slots should not intersect")
+            }
+            prevSlot = slot
+        }
     }
 
 
@@ -51,7 +60,7 @@ class SlotsConstraint(slots: TimeSlots) : BooleanConstraint {
         val sortedSchedule = schedule.events.map {
             Pair(it.time.units, it.time.units + it.event.duration.units)
         }.sortedWith(
-            compareBy({ it.first}, {it.second})
+            compareBy({ it.first }, { it.second })
         )
 
         var iSlots = 0

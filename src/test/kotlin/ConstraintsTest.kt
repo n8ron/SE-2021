@@ -16,8 +16,8 @@ class ConstraintsTest {
             listOf(
                 Pair(Duration(2), TimeStamp(0)),
                 Pair(Duration(1), TimeStamp(3)),
-                Pair(Duration(4), TimeStamp(4)),
-                Pair(Duration(1), TimeStamp(9))
+                Pair(Duration(4), TimeStamp(5)),
+                Pair(Duration(1), TimeStamp(10))
             )
         )
 
@@ -42,8 +42,8 @@ class ConstraintsTest {
             listOf(
                 TimedEvent(Event(0, Duration(2), listOf()), TimeStamp(0)),
                 TimedEvent(Event(0, Duration(1), listOf()), TimeStamp(3)),
-                TimedEvent(Event(0, Duration(4), listOf()), TimeStamp(4)),
-                TimedEvent(Event(0, Duration(1), listOf()), TimeStamp(9)),
+                TimedEvent(Event(0, Duration(4), listOf()), TimeStamp(5)),
+                TimedEvent(Event(0, Duration(1), listOf()), TimeStamp(10)),
             )
         )
         assertTrue { constraint.isSatisfied(correctSchedule) }
@@ -52,8 +52,8 @@ class ConstraintsTest {
             listOf(
                 TimedEvent(Event(0, Duration(1), listOf()), TimeStamp(1)),
                 TimedEvent(Event(0, Duration(1), listOf()), TimeStamp(3)),
-                TimedEvent(Event(0, Duration(2), listOf()), TimeStamp(5)),
-                TimedEvent(Event(0, Duration(1), listOf()), TimeStamp(9)),
+                TimedEvent(Event(0, Duration(2), listOf()), TimeStamp(6)),
+                TimedEvent(Event(0, Duration(1), listOf()), TimeStamp(10)),
             )
         )
         assertTrue { constraint.isSatisfied(correctSchedule) }
