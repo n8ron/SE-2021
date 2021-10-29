@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import java.lang.IllegalStateException
+import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
@@ -187,6 +188,38 @@ class ConstraintsTest {
         )
 
         assertFalse { constraint.isSatisfied(incorrectSchedule) }
+    }
+
+    @Test
+    fun slotsConstraintCalcPenaltyTest() {
+        val slots = TimeSlots(
+            listOf(
+                Pair(Duration(3), TimeStamp(4)),
+                Pair(Duration(4), TimeStamp(9)),
+                Pair(Duration(1), TimeStamp(14)),
+                Pair(Duration(2), TimeStamp(17))
+            )
+        )
+
+        val constraint = SlotsConstraint(slots)
+
+        val correctSchedule = Schedule(
+            listOf(
+                TimedEvent(Event(0, Duration(2), listOf()), TimeStamp(5)),
+                TimedEvent(Event(0, Duration(1), listOf()), TimeStamp(14))
+            )
+        )
+
+        assertEquals(.0, constraint.calcPenalty(correctSchedule))
+
+        val incorrectSchedule = Schedule(
+            listOf(
+                TimedEvent(Event(0, Duration(2), listOf()), TimeStamp(9)),
+                TimedEvent(Event(0, Duration(1), listOf()), TimeStamp(11))
+            )
+        )
+
+        assertEquals(Double.MAX_VALUE, constraint.calcPenalty(incorrectSchedule))
     }
 
     @Test

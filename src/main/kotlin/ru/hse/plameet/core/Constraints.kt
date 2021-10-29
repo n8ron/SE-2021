@@ -25,7 +25,7 @@ class AvailabilityConstraint : RequiredConstraint {
     }
 }
 
-class SlotsConstraint(slots: TimeSlots) : BooleanConstraint {
+open class SlotsConstraint(slots: TimeSlots) : BooleanConstraint {
 
     private val sortedSlots = TimeSlots(
         slots.slots.sortedWith(
@@ -97,3 +97,6 @@ class SlotsConstraint(slots: TimeSlots) : BooleanConstraint {
         return false
     }
 }
+
+class TimetableConstraint(slots: List<TimeStamp>, duration: Duration) :
+    SlotsConstraint(TimeSlots(slots.map { Pair(duration, it) }))
