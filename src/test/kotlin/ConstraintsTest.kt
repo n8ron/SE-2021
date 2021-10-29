@@ -67,6 +67,20 @@ class ConstraintsTest {
             )
         )
         assertTrue { constraint.isSatisfied(correctSchedule) }
+    }
+
+    @Test
+    fun slotsConstraintScheduleIntersectionsTest() {
+        val slots = TimeSlots(
+            listOf(
+                Pair(Duration(2), TimeStamp(0)),
+                Pair(Duration(1), TimeStamp(3)),
+                Pair(Duration(4), TimeStamp(5)),
+                Pair(Duration(1), TimeStamp(10))
+            )
+        )
+
+        val constraint = SlotsConstraint(slots)
 
         var scheduleWithIntersections = Schedule(
             listOf(
@@ -103,7 +117,7 @@ class ConstraintsTest {
     }
 
     @Test
-    fun slotsConstraintIntersectionsTest() {
+    fun slotsConstraintSlotIntersectionsTest() {
         var intersectSlots = TimeSlots(
             listOf(
                 Pair(Duration(2), TimeStamp(0)),
