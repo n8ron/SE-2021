@@ -65,7 +65,6 @@ class SlotsConstraint(slots: TimeSlots) : BooleanConstraint {
         )
 
         // Validating that the schedule don't intersect
-        // TODO only one schedule per slot
         if (isIntersected(sortedSchedule)) {
             return false
         }
@@ -74,12 +73,11 @@ class SlotsConstraint(slots: TimeSlots) : BooleanConstraint {
         for ((startEvent, endEvent) in sortedSchedule) {
             var isSatisfied = false
             while (iSlots < sortedSlots.slots.size) {
-                val (startSlot, endSlots) = getStartEnd(iSlots)
+                val (startSlot, endSlots) = getStartEnd(iSlots++)
                 if (startSlot <= startEvent && endEvent <= endSlots) {
                     isSatisfied = true
                     break
                 }
-                iSlots++
             }
             if (!isSatisfied) {
                 return false
