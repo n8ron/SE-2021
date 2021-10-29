@@ -62,7 +62,6 @@ class ConstraintsTest {
                 TimedEvent(Event(0, Duration(1), listOf()), TimeStamp(1)),
                 TimedEvent(Event(0, Duration(1), listOf()), TimeStamp(3)),
                 TimedEvent(Event(0, Duration(1), listOf()), TimeStamp(5)),
-                TimedEvent(Event(0, Duration(2), listOf()), TimeStamp(7)),
                 TimedEvent(Event(0, Duration(1), listOf()), TimeStamp(10)),
             )
         )
