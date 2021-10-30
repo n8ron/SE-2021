@@ -10,3 +10,7 @@ fun intersectsSorted(sortedIntervals: Iterable<TimeRange>): Boolean {
     }
     return false
 }
+
+fun mergeIntervals(intervals: Iterable<TimeRange>): Iterable<TimeRange> {
+    TODO("Not implemented")
+}
