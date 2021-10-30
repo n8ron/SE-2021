@@ -2,7 +2,7 @@ package ru.hse.plameet.core
 
 import java.lang.IllegalStateException
 
-open class SlotsConstraint(slots: TimeSlots) : BooleanConstraint {
+open class SlotsConstraint(slots: TimeSlots) : RequiredConstraint {
 
     private val sortedSlots = TimeSlots(
         slots.slots.sortedWith(
@@ -16,9 +16,6 @@ open class SlotsConstraint(slots: TimeSlots) : BooleanConstraint {
             throw IllegalStateException("Slots should not intersect")
         }
     }
-
-    override val weight: Double
-        get() = TODO("Not yet implemented")
 
     override fun isSatisfied(schedule: Schedule): Boolean {
         val sortedSchedule = schedule.events.asSequence()

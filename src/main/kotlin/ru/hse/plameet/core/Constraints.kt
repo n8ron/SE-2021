@@ -7,7 +7,7 @@ interface Constraint {
 interface BooleanConstraint : Constraint {
     val weight: Double
 
-    override fun calcPenalty(schedule: Schedule) = if (isSatisfied(schedule)) weight else .0
+    override fun calcPenalty(schedule: Schedule) = if (isSatisfied(schedule)) .0 else weight
 
     fun isSatisfied(schedule: Schedule): Boolean
 }
