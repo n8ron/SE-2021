@@ -38,7 +38,8 @@ class UtilsTest {
                 TimeRange(TimeStamp(0), TimeStamp(2)),
                 TimeRange(TimeStamp(1), TimeStamp(2)),
                 TimeRange(TimeStamp(0), TimeStamp(2))
-            )
+            ),
+            listOf<TimeRange>() to listOf()
         )
         expected2interval.forEach {
             assertTrue(
