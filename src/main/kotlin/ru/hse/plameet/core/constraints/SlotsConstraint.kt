@@ -1,6 +1,6 @@
-package ru.hse.plameet.core
+package ru.hse.plameet.core.constraints
 
-import java.lang.IllegalStateException
+import ru.hse.plameet.core.*
 
 open class SlotsConstraint(slots: TimeSlots) : RequiredConstraint {
 

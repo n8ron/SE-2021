@@ -1,4 +1,6 @@
-package ru.hse.plameet.core
+package ru.hse.plameet.core.constraints
+
+import ru.hse.plameet.core.Schedule
 
 interface Constraint {
     fun calcPenalty(schedule: Schedule): Double

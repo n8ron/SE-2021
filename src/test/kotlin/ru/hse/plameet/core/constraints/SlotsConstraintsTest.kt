@@ -1,9 +1,10 @@
-package ru.hse.plameet.core
+package ru.hse.plameet.core.constraints
 
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
-import ru.hse.plameet.core.SlotsConstraint.TimeSlots
+import ru.hse.plameet.core.*
+import ru.hse.plameet.core.constraints.SlotsConstraint.TimeSlots
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue

@@ -1,8 +1,8 @@
-package ru.hse.plameet.core
+package ru.hse.plameet.core.constraints
 
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import java.lang.IllegalStateException
+import ru.hse.plameet.core.*
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
