@@ -7,7 +7,7 @@ class UtilsTest {
 
     @Test
     fun mergeIntervalsTest() {
-        val expected2interval: List<Pair<List<TimeRange>, List<TimeRange>>> = listOf(
+        val expected2interval: List<Pair<List<TimeRange>, List<TimeRange>>> = mutableListOf(
             listOf(
                 TimeRange(TimeStamp(0), TimeStamp(2)),
                 TimeRange(TimeStamp(3), TimeStamp(6)),
@@ -42,9 +42,9 @@ class UtilsTest {
             listOf<TimeRange>() to listOf()
         )
         expected2interval.forEach {
-            assertTrue(
-                it.first.containsAll(it.second) && it.second.containsAll(it.first)
-            )
+            val mergedIntervals = mergeIntervals(it.second)
+            assertTrue { it.first.containsAll(mergedIntervals) }
+            assertTrue { mergedIntervals.containsAll(it.first) }
         }
     }
 }
