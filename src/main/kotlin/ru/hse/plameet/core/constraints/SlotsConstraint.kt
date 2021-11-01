@@ -2,17 +2,16 @@ package ru.hse.plameet.core.constraints
 
 import ru.hse.plameet.core.*
 
-open class SlotsConstraint(slots: TimeSlots) : RequiredConstraint {
+open class SlotsConstraint(slots: List<TimeRange>) : RequiredConstraint {
 
-    private val sortedSlots = TimeSlots(
-        slots.slots.sortedWith(
+    internal val sortedSlots =
+        slots.sortedWith(
             compareBy { it.begin.units }
         )
-    )
 
     init {
         // Validating that the slots don't intersect
-        if (intersectsSorted(sortedSlots.slots)) {
+        if (intersectsSorted(sortedSlots)) {
             throw IllegalStateException("Slots should not intersect")
         }
     }
@@ -31,8 +30,8 @@ open class SlotsConstraint(slots: TimeSlots) : RequiredConstraint {
         var curSlot = 0
         for (event in sortedSchedule) {
             var isSatisfied = false
-            while (curSlot < sortedSlots.slots.size) {
-                val slot = sortedSlots.slots[curSlot++]
+            while (curSlot < sortedSlots.size) {
+                val slot = sortedSlots[curSlot++]
                 if (slot.contains(event)) {
                     isSatisfied = true
                     break
@@ -45,7 +44,4 @@ open class SlotsConstraint(slots: TimeSlots) : RequiredConstraint {
 
         return true
     }
-
-    @JvmInline
-    value class TimeSlots(val slots: List<TimeRange>)
 }

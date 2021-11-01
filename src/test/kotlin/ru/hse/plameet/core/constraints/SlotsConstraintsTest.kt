@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import ru.hse.plameet.core.*
-import ru.hse.plameet.core.constraints.SlotsConstraint.TimeSlots
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -13,13 +12,11 @@ class SlotsConstraintsTest {
 
     @Test
     fun slotsConstraintIsSatisfiedTest() {
-        val slots = TimeSlots(
-            listOf(
-                TimeStamp(0).during(Duration(2)),
-                TimeStamp(3).during(Duration(1)),
-                TimeStamp(5).during(Duration(4)),
-                TimeStamp(10).during(Duration(1))
-            )
+        val slots = listOf(
+            TimeStamp(0).during(Duration(2)),
+            TimeStamp(3).during(Duration(1)),
+            TimeStamp(5).during(Duration(4)),
+            TimeStamp(10).during(Duration(1))
         )
 
         val constraint = SlotsConstraint(slots)
@@ -72,13 +69,11 @@ class SlotsConstraintsTest {
 
     @Test
     fun slotsConstraintScheduleIntersectionsTest() {
-        val slots = TimeSlots(
-            listOf(
-                TimeStamp(0).during(Duration(2)),
-                TimeStamp(3).during(Duration(1)),
-                TimeStamp(5).during(Duration(4)),
-                TimeStamp(10).during(Duration(1))
-            )
+        val slots = listOf(
+            TimeStamp(0).during(Duration(2)),
+            TimeStamp(3).during(Duration(1)),
+            TimeStamp(5).during(Duration(4)),
+            TimeStamp(10).during(Duration(1))
         )
 
         val constraint = SlotsConstraint(slots)
@@ -119,41 +114,34 @@ class SlotsConstraintsTest {
 
     @Test
     fun slotsConstraintSlotIntersectionsTest() {
-        var intersectSlots = TimeSlots(
-            listOf(
-                TimeStamp(0).during(Duration(2)),
-                TimeStamp(2).during(Duration(1)),
-            )
+        var intersectSlots = listOf(
+            TimeStamp(0).during(Duration(2)),
+            TimeStamp(2).during(Duration(1)),
         )
         assertThrows<IllegalStateException> { SlotsConstraint(intersectSlots) }
 
-        intersectSlots = TimeSlots(
-            listOf(
-                TimeStamp(0).during(Duration(2)),
-                TimeStamp(4).during(Duration(4)),
-                TimeStamp(7).during(Duration(1)),
-                TimeStamp(3).during(Duration(1))
-            )
+        intersectSlots = listOf(
+            TimeStamp(0).during(Duration(2)),
+            TimeStamp(4).during(Duration(4)),
+            TimeStamp(7).during(Duration(1)),
+            TimeStamp(3).during(Duration(1))
         )
         assertThrows<IllegalStateException> { SlotsConstraint(intersectSlots) }
 
-        intersectSlots = TimeSlots(
-            listOf(
-                TimeStamp(0).during(Duration(2)),
-                TimeStamp(4).during(Duration(4)),
-                TimeStamp(5).during(Duration(1)),
-                TimeStamp(3).during(Duration(1))
-            )
+        intersectSlots = listOf(
+            TimeStamp(0).during(Duration(2)),
+            TimeStamp(4).during(Duration(4)),
+            TimeStamp(5).during(Duration(1)),
+            TimeStamp(3).during(Duration(1))
         )
+
         assertThrows<IllegalStateException> { SlotsConstraint(intersectSlots) }
 
-        val correctSlots = TimeSlots(
-            listOf(
-                TimeStamp(0).during(Duration(2)),
-                TimeStamp(3).during(Duration(5)),
-                TimeStamp(9).during(Duration(1)),
-                TimeStamp(11).during(Duration(2)),
-            )
+        val correctSlots = listOf(
+            TimeStamp(0).during(Duration(2)),
+            TimeStamp(3).during(Duration(5)),
+            TimeStamp(9).during(Duration(1)),
+            TimeStamp(11).during(Duration(2)),
         )
 
         assertDoesNotThrow { SlotsConstraint(correctSlots) }
@@ -161,13 +149,11 @@ class SlotsConstraintsTest {
 
     @Test
     fun slotConstraintManyEventInOneSlotTest() {
-        val slots = TimeSlots(
-            listOf(
-                TimeStamp(0).during(Duration(3)),
-                TimeStamp(4).during(Duration(2)),
-                TimeStamp(8).during(Duration(4)),
-                TimeStamp(13).during(Duration(1))
-            )
+        val slots = listOf(
+            TimeStamp(0).during(Duration(3)),
+            TimeStamp(4).during(Duration(2)),
+            TimeStamp(8).during(Duration(4)),
+            TimeStamp(13).during(Duration(1))
         )
 
         val constraint = SlotsConstraint(slots)
@@ -207,13 +193,11 @@ class SlotsConstraintsTest {
 
     @Test
     fun slotsConstraintCalcPenaltyTest() {
-        val slots = TimeSlots(
-            listOf(
-                TimeStamp(4).during(Duration(3)),
-                TimeStamp(9).during(Duration(4)),
-                TimeStamp(14).during(Duration(1)),
-                TimeStamp(17).during(Duration(2))
-            )
+        val slots = listOf(
+            TimeStamp(4).during(Duration(3)),
+            TimeStamp(9).during(Duration(4)),
+            TimeStamp(14).during(Duration(1)),
+            TimeStamp(17).during(Duration(2))
         )
 
         val constraint = SlotsConstraint(slots)
