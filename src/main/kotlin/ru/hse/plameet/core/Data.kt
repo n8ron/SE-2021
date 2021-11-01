@@ -18,8 +18,7 @@ data class Event(val id: Int, val duration: Duration, val participants: List<Use
 
 data class TimedEvent(val event: Event, val time: TimeStamp)
 
-@JvmInline
-value class Schedule(val events: List<TimedEvent>)
+data class Schedule(val events: List<TimedEvent>)
 
 operator fun TimeStamp.plus(duration: Duration) = TimeStamp(this.units + duration.units)
 operator fun TimeStamp.minus(timeStamp: TimeStamp) = Duration(this.units - timeStamp.units)
