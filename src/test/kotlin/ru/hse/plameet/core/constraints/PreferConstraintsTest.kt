@@ -37,7 +37,7 @@ class PreferConstraintsTest {
             Event(3, Duration(3), listOf(User(0), User(1))),
             Event(4, Duration(1), listOf(User(2), User(1))),
             Event(5, Duration(2), listOf(User(2), User(0))),
-            Event(6, Duration(10), listOf(User(3), User(2), User(0)))
+            Event(6, Duration(10), listOf(User(2), User(1), User(0)))
         )
 
         var schedule = schedule(
