@@ -7,6 +7,21 @@ on:
   workflow_dispatch:
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache Gradle packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle
+      - name: Run ktlint with Gradle
+        run: |
+          chmod +x gradlew
+          ./gradlew check
+
   build:
     runs-on: ubuntu-latest
     steps:
@@ -26,7 +41,7 @@ jobs:
       - name: Build with Gradle
         run: |
           chmod +x gradlew
-          ./gradlew build
+          ./gradlew build -x check
 
   test:
     needs: build
@@ -48,7 +63,7 @@ jobs:
       - name: Run tests with Gradle
         run: |
           chmod +x gradlew
-          ./gradlew test
+          ./gradlew test -x check
 
   coverage:
     needs: test
@@ -61,22 +76,18 @@ jobs:
           java-version: 11
           distribution: adopt
           java-package: jre
+      - name: Cache Gradle packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle
       - name: Run JaCoCo
         run: |
           chmod +x gradlew
-          ./gradlew jacocoTestReport
+          ./gradlew jacocoTestReport -x check
       - name: Upload jaCoCo coverage report
         uses: actions/upload-artifact@v2
         with:
           name: test-coverage
           path: build/reports/jacoco/test/html
-
-  lint:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Run ktlint with Gradle
-        run: |
-          chmod +x gradlew
-          ./gradlew ktlintCheck
