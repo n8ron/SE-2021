@@ -51,7 +51,7 @@ jobs:
           ./gradlew test
 
   coverage:
-    needs: tests
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
