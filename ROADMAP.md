@@ -11,15 +11,26 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Initial set of constraints: AvailabilityConstraint, AllInConstraint, PreferConstraint, SlotsConstraint,
   TimeTableConstraint
-- Initial solver, MatchingSolver, supporting SlotsConstraint, AllInConstraint, AvailabilityConstraint
+- Initial solver, MatchingSolver, supporting SlotsConstraint, AllInConstraint
 
-## [0.1.1]
-
-### Added
-
-- MatchingSolver supports PreferConstraint
+## [0.2.0]
 
 ### Changed
 
 - Better documentation for solver and constraints
+- Constraints Renaming and interface changing
+
+### Fixed
+
+- Remove intersecting of slots constraints because it's undefined
+
+## [0.2.1]
+
+### Added
+
+- MatchingSolver supports PreferConstraint
+- OrderConstraint
+
+### Changed
+
 - MatchingSolver performance improved by using RangeSet
