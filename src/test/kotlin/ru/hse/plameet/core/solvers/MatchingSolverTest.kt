@@ -84,8 +84,6 @@ class MatchingSolverTest {
         checkSolver(listOf(smallEvent, smallEvent), listOf(slotsConstraints[0], slotsConstraints[4]), false)
         checkSolver(listOf(longEvent), listOf(slotsConstraints[0], slotsConstraints[4]), false)
 
-        checkSolver(listOf(smallEvent, smallEvent, smallEvent), listOf(slotsConstraints[0], slotsConstraints[1]), true)
-        checkSolver(listOf(smallEvent, smallEvent, longEvent), listOf(slotsConstraints[0], slotsConstraints[1]), true)
         checkSolver(listOf(smallEvent, longEvent, longEvent), listOf(slotsConstraints[0], slotsConstraints[1]), false)
 
         checkSolver(listOf(smallEvent, smallEvent), listOf(slotsConstraints[1], slotsConstraints[2]), true)

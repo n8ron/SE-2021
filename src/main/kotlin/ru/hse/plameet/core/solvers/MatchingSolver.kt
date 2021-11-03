@@ -17,7 +17,7 @@ class MatchingSolver private constructor(
 ) {
 
     private fun solve(): Schedule? {
-        val slots = constraints.slots.first().sortedSlots
+        val slots = constraints.slots.sortedSlots
 
         val matching = buildMatching(slots)
 
@@ -65,22 +65,25 @@ class MatchingSolver private constructor(
     private data class IntEdge(val left: Int, val right: Int)
 
     private data class KnownConstraints(
-        val slots: MutableList<SlotsConstraint> = mutableListOf()
+        val slots: SlotsConstraint
     )
 
     companion object : Solver {
         override fun solve(events: List<Event>, constraints: List<Constraint>): Schedule? {
-            val knownConstraints = KnownConstraints()
+            val slots = mutableListOf<SlotsConstraint>()
             for (constraint in constraints) {
                 when (constraint) {
-                    is SlotsConstraint -> knownConstraints.slots.add(constraint)
+                    is SlotsConstraint -> slots.add(constraint)
                 }
             }
 
-            if (knownConstraints.slots.size != 1) {
-                throw IllegalArgumentException("May solve only with one slots constraint")
+            val slot = if (slots.isEmpty()) {
+                throw IllegalArgumentException("Must contain at least one slotsConstraint")
+            } else {
+                SlotsConstraint.intersection(slots)
             }
 
+            val knownConstraints = KnownConstraints(slot)
             return MatchingSolver(events, knownConstraints, constraints).solve()
         }
     }
