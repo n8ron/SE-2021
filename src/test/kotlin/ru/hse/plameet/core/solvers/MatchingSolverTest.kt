@@ -8,6 +8,7 @@ import ru.hse.plameet.core.constraints.AllInConstraint
 import ru.hse.plameet.core.constraints.RequiredConstraint
 import ru.hse.plameet.core.constraints.SlotsConstraint
 import ru.hse.plameet.core.during
+import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
@@ -114,13 +115,56 @@ class MatchingSolverTest {
         checkSolver(listOf(longEvent), listOf(slotsConstraints[3], slotsConstraints[4]), false)
     }
 
-    private fun checkSolver(events: List<Event>, constraints: List<RequiredConstraint>, solvable: Boolean) {
-        val allInConstraint = AllInConstraint(events)
+    @Test
+    fun unnecessaryEventsTest() {
+        var id = 0
+        fun smallEvents() = sequence {
+            while (true) {
+                yield(Event(id++, Duration(2), listOf()))
+            }
+        }
+
+        fun longEvents() = sequence {
+            while (true) {
+                yield(Event(id++, Duration(10), listOf()))
+            }
+        }
+
+        val slotsConstraint = listOf(
+            SlotsConstraint(
+                listOf(
+                    TimeStamp(0).during(Duration(2)),
+                    TimeStamp(5).during(Duration(4)),
+                    TimeStamp(20).during(Duration(15))
+                )
+            )
+        )
+        checkSolver(smallEvents().take(4).toList(), slotsConstraint, true, listOf())
+        checkSolver(longEvents().take(2).toList(), slotsConstraint, true, listOf())
+
+        var requiredEvents = smallEvents().take(3).toList()
+        checkSolver(smallEvents().take(1).toList() + requiredEvents, slotsConstraint, true, requiredEvents)
+        checkSolver(longEvents().take(1).toList() + requiredEvents, slotsConstraint, true, requiredEvents)
+
+        requiredEvents = smallEvents().take(4).toList()
+        checkSolver(smallEvents().take(1).toList() + requiredEvents, slotsConstraint, false, requiredEvents)
+        checkSolver(longEvents().take(1).toList() + requiredEvents, slotsConstraint, false, requiredEvents)
+    }
+
+
+    private fun checkSolver(
+        events: List<Event>,
+        constraints: List<RequiredConstraint>,
+        solvable: Boolean,
+        requiredEvents: List<Event> = events
+    ) {
+        val allInConstraint = AllInConstraint(requiredEvents)
         val solution = MatchingSolver.solve(events, constraints + allInConstraint)
         if (solvable) {
             for (constraint in constraints) {
-                assertTrue { constraint.isSatisfied(solution!!) }
-                assertTrue { allInConstraint.isSatisfied(solution!!) }
+                assertNotNull(solution)
+                assertTrue { constraint.isSatisfied(solution) }
+                assertTrue { allInConstraint.isSatisfied(solution) }
             }
         } else {
             assertNull(solution)
