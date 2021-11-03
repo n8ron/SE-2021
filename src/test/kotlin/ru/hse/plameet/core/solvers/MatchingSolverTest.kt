@@ -48,32 +48,32 @@ class MatchingSolverTest {
         val longEvent = Event(1, Duration(10), listOf())
 
         val slotsConstraints = listOf(
-            SlotsConstraint(  // 0
+            SlotsConstraint( // 0
                 listOf(
                     TimeStamp(0).during(Duration(10)),
                     TimeStamp(20).during(Duration(10))
                 )
             ),
-            SlotsConstraint(  // 1
+            SlotsConstraint( // 1
                 listOf(
                     TimeStamp(0).during(Duration(2)),
                     TimeStamp(5).during(Duration(4)),
                     TimeStamp(20).during(Duration(15))
                 )
             ),
-            SlotsConstraint(  // 2
+            SlotsConstraint( // 2
                 listOf(
                     TimeStamp(6).during(Duration(5)),
                     TimeStamp(22).during(Duration(5))
                 )
             ),
-            SlotsConstraint(  // 3
+            SlotsConstraint( // 3
                 listOf(
                     TimeStamp(0).during(Duration(8)),
                     TimeStamp(24).during(Duration(10))
                 )
             ),
-            SlotsConstraint(  // 4
+            SlotsConstraint( // 4
                 listOf(
                     TimeStamp(2).during(Duration(3)),
                     TimeStamp(9).during(Duration(11))
