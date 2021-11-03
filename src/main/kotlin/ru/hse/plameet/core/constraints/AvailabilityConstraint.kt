@@ -10,12 +10,20 @@ class AvailabilityConstraint(av: Map<User, List<TimeRange>>) : RequiredConstrain
         )
     }
 
+    init {
+        av.values.forEach {
+            if (intersectsSorted(it)) {
+                throw IllegalArgumentException("Users' available slots should not overlap")
+            }
+        }
+    }
+
     override fun isSatisfied(schedule: Schedule): Boolean {
         val user2schedule: MutableMap<User, MutableList<TimeRange>> = mutableMapOf()
         for (event in schedule.events) {
             val eventTimeRange = event.time.during(event.event.duration)
             for (participant in event.event.participants) {
-                user2schedule.getOrPut(participant, { mutableListOf() }).add(eventTimeRange)
+                user2schedule.getOrPut(participant) { mutableListOf() }.add(eventTimeRange)
             }
         }
         for ((user, eventsRanges) in user2schedule) {
