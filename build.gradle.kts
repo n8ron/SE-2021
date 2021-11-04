@@ -14,7 +14,6 @@ repositories {
 }
 
 dependencies {
-    implementation("org.jacoco:org.jacoco.core:0.8.7")
     implementation("org.jgrapht:jgrapht-core:1.5.1")
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:1.5.31")
