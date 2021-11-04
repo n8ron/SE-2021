@@ -64,28 +64,12 @@ jobs:
         run: |
           chmod +x gradlew
           ./gradlew test -x check
-
-  coverage:
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Setup Java JDK
-        uses: actions/setup-java@v2.3.1
+      - name: Upload test report
+        if: failure()
+        uses: actions/upload-artifact@v2
         with:
-          java-version: 11
-          distribution: adopt
-          java-package: jre
-      - name: Cache Gradle packages
-        uses: actions/cache@v1
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
-          restore-keys: ${{ runner.os }}-gradle
-      - name: Run JaCoCo
-        run: |
-          chmod +x gradlew
-          ./gradlew jacocoTestReport -x check
+          name: test-report
+          path: build/reports/tests/test
       - name: Upload jaCoCo coverage report
         uses: actions/upload-artifact@v2
         with:
