@@ -38,7 +38,6 @@ tasks.jacocoTestReport {
     dependsOn(tasks.test)
 }
 
-
 ktlint {
     enableExperimentalRules.set(true)
 }
