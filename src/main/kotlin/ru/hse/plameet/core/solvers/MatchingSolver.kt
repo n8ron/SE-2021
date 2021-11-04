@@ -21,9 +21,6 @@ class MatchingSolver private constructor(
 
         val matching = buildMatching(slots)
 
-        // must be removed after implementing constraint which check that all event in schedule
-        if (matching.edges.size < events.size) return null
-
         val timedEvents = mutableListOf<TimedEvent>()
         matching.forEach { match ->
             timedEvents.add(TimedEvent(events[match.left], slots[match.right].begin))
