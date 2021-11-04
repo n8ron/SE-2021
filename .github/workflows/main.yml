@@ -7,17 +7,18 @@ on:
   workflow_dispatch:
 
 jobs:
-  lint:
+  check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Cache Gradle packages
         uses: actions/cache@v1
         with:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
-      - name: Run ktlint with Gradle
+      - name: Check
         run: |
           chmod +x gradlew
           ./gradlew check
@@ -25,8 +26,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Setup Java JDK
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Java JRE
         uses: actions/setup-java@v2.3.1
         with:
           java-version: 11
@@ -38,7 +40,7 @@ jobs:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
-      - name: Build with Gradle
+      - name: Build
         run: |
           chmod +x gradlew
           ./gradlew build -x check
@@ -47,8 +49,9 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Setup Java JDK
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Java JRE
         uses: actions/setup-java@v2.3.1
         with:
           java-version: 11
@@ -60,7 +63,7 @@ jobs:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
-      - name: Run tests with Gradle
+      - name: Test
         run: |
           chmod +x gradlew
           ./gradlew test -x check
@@ -70,7 +73,7 @@ jobs:
         with:
           name: test-report
           path: build/reports/tests/test
-      - name: Upload jaCoCo coverage report
+      - name: Upload JaCoCo report
         uses: actions/upload-artifact@v2
         with:
           name: test-coverage
