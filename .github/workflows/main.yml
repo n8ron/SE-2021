@@ -28,7 +28,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Setup Java JRE
+      - name: Setup JRE
         uses: actions/setup-java@v2.3.1
         with:
           java-version: 11
@@ -51,7 +51,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Setup Java JRE
+      - name: Setup JRE
         uses: actions/setup-java@v2.3.1
         with:
           java-version: 11
