@@ -88,14 +88,26 @@ class MatchingSolverTest {
         checkSolver(listOf(smallEvent(), smallEvent()), listOf(slotsConstraints[0], slotsConstraints[4]), false)
         checkSolver(listOf(longEvent()), listOf(slotsConstraints[0], slotsConstraints[4]), false)
 
-        checkSolver(listOf(smallEvent(), longEvent(), longEvent()), listOf(slotsConstraints[0], slotsConstraints[1]), false)
+        checkSolver(
+            listOf(smallEvent(), longEvent(), longEvent()),
+            listOf(slotsConstraints[0], slotsConstraints[1]),
+            false
+        )
 
         checkSolver(listOf(smallEvent(), smallEvent()), listOf(slotsConstraints[1], slotsConstraints[2]), true)
-        checkSolver(listOf(smallEvent(), smallEvent(), smallEvent()), listOf(slotsConstraints[1], slotsConstraints[2]), false)
+        checkSolver(
+            listOf(smallEvent(), smallEvent(), smallEvent()),
+            listOf(slotsConstraints[1], slotsConstraints[2]),
+            false
+        )
         checkSolver(listOf(longEvent()), listOf(slotsConstraints[1], slotsConstraints[2]), false)
 
         checkSolver(listOf(smallEvent(), smallEvent()), listOf(slotsConstraints[1], slotsConstraints[3]), true)
-        checkSolver(listOf(smallEvent(), smallEvent(), smallEvent()), listOf(slotsConstraints[1], slotsConstraints[3]), false)
+        checkSolver(
+            listOf(smallEvent(), smallEvent(), smallEvent()),
+            listOf(slotsConstraints[1], slotsConstraints[3]),
+            false
+        )
         checkSolver(listOf(smallEvent(), longEvent()), listOf(slotsConstraints[1], slotsConstraints[3]), true)
 
         checkSolver(
@@ -148,7 +160,6 @@ class MatchingSolverTest {
         checkSolver(smallEvents().take(4).toList(), slotsConstraint, false)
         checkSolver(longEvents().take(2).toList(), slotsConstraint, false)
     }
-
 
     private fun checkSolver(
         events: List<Event>,
