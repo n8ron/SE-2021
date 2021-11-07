@@ -2,13 +2,11 @@ package ru.hse.plameet.core.solvers
 
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import ru.hse.plameet.core.Duration
-import ru.hse.plameet.core.Event
-import ru.hse.plameet.core.TimeStamp
+import ru.hse.plameet.core.*
+import ru.hse.plameet.core.constraints.BooleanConstraint
 import ru.hse.plameet.core.constraints.EventsRequiredConstraint
-import ru.hse.plameet.core.constraints.RequiredConstraint
 import ru.hse.plameet.core.constraints.TimeSlotsConstraint
-import ru.hse.plameet.core.during
+import ru.hse.plameet.core.constraints.UserAvailabilityConstraint
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
@@ -103,9 +101,45 @@ class MatchingSolverTest {
         checkSolver(longEvents().take(2).toList(), timeSlotsConstraint, false)
     }
 
+    @Test
+    fun testAvailabilityConstraint() {
+        val users = listOf(User(0), User(1), User(2), User(3))
+        val events = listOf(
+            Event(0, Duration(1), listOf(users[0], users[1])),
+            Event(1, Duration(2), listOf(users[2], users[3])),
+            Event(2, Duration(2), listOf(users[0], users[2]))
+        )
+
+        val slots = TimeSlotsConstraint(listOf(TimeStamp(1), TimeStamp(5), TimeStamp(9)), Duration(2))
+
+        val availability1 = UserAvailabilityConstraint(mapOf(
+            users[0] to listOf(slots.sortedSlots[0], slots.sortedSlots[1]),
+            users[1] to listOf(slots.sortedSlots[1]),
+            users[2] to listOf(slots.sortedSlots[0], slots.sortedSlots[2]),
+            users[3] to listOf(slots.sortedSlots[2])
+        ))
+        checkSolver(events, listOf(slots, availability1), true)
+
+        val availability2 = UserAvailabilityConstraint(mapOf(
+            users[0] to listOf(slots.sortedSlots[0], slots.sortedSlots[1]),
+            users[1] to listOf(slots.sortedSlots[1]),
+            users[2] to listOf(slots.sortedSlots[0], slots.sortedSlots[1]),
+            users[3] to listOf(slots.sortedSlots[2])
+        ))
+        checkSolver(events, listOf(slots, availability2), false)
+
+        val availability3 = UserAvailabilityConstraint(mapOf(
+            users[0] to listOf(slots.sortedSlots[0], slots.sortedSlots[1]),
+            users[1] to listOf(slots.sortedSlots[0]),
+            users[2] to listOf(slots.sortedSlots[0], slots.sortedSlots[2]),
+            users[3] to listOf(slots.sortedSlots[2])
+        ))
+        checkSolver(events, listOf(slots, availability3), false)
+    }
+
     private fun checkSolver(
         events: List<Event>,
-        constraints: List<RequiredConstraint>,
+        constraints: List<BooleanConstraint>,
         solvable: Boolean
     ) {
         val eventsRequiredConstraint = EventsRequiredConstraint(events)

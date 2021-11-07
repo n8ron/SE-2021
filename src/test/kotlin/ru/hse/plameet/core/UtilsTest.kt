@@ -1,6 +1,7 @@
 package ru.hse.plameet.core
 
 import org.junit.jupiter.api.Test
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class UtilsTest {
@@ -46,5 +47,23 @@ class UtilsTest {
             assertTrue { it.first.containsAll(mergedIntervals) }
             assertTrue { mergedIntervals.containsAll(it.first) }
         }
+    }
+
+    @Test
+    fun testSubrange() {
+        assertTrue { timeRange(2, 4).subrange(timeRange(1, 5)) }
+        assertTrue { timeRange(2, 4).subrange(timeRange(2, 5)) }
+        assertTrue { timeRange(2, 4).subrange(timeRange(1, 4)) }
+        assertTrue { timeRange(2, 4).subrange(timeRange(2, 4)) }
+        assertFalse { timeRange(2, 4).subrange(timeRange(3, 14)) }
+        assertFalse { timeRange(2, 4).subrange(timeRange(8, 14)) }
+        assertFalse { timeRange(2, 4).subrange(timeRange(0, 2)) }
+    }
+
+    @Test
+    fun testSubrangeSorted() {
+        assertTrue { timeRange(5, 7).subrangeSorted(listOf(timeRange(1, 3), timeRange(4, 7), timeRange(9, 13))) }
+        assertTrue { timeRange(5, 7).subrangeSorted(listOf(timeRange(2, 5), timeRange(5, 7), timeRange(9, 13))) }
+        assertFalse { timeRange(5, 7).subrangeSorted(listOf(timeRange(2, 5), timeRange(5, 6), timeRange(7, 13))) }
     }
 }

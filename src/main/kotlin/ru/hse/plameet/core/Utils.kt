@@ -71,3 +71,27 @@ fun intersectSorted(intervalsA: Iterable<TimeRange>, intervalsB: Iterable<TimeRa
     }
     return ans
 }
+
+/**
+ * Check if this range is a subrange of other range
+ */
+fun TimeRange.subrange(other: TimeRange): Boolean {
+    return this.begin.units >= other.begin.units && this.end.units <= other.end.units
+}
+
+/**
+ * Check if range is a subrange of any range in ranges (ranges sorted and does not intersects)
+ */
+fun TimeRange.subrangeSorted(ranges: List<TimeRange>): Boolean {
+    var l = 0
+    var r = ranges.size
+    while (r - l > 1) {
+        val m = (r + l) / 2
+        if (ranges[m].begin.units <= this.begin.units) {
+            l = m
+        } else {
+            r = m
+        }
+    }
+    return this.subrange(ranges[l])
+}
