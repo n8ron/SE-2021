@@ -1,6 +1,7 @@
 package ru.hse.plameet.core.solvers
 
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import ru.hse.plameet.core.Duration
 import ru.hse.plameet.core.Event
 import ru.hse.plameet.core.TimeStamp
@@ -51,7 +52,7 @@ class MatchingSolverTest {
         val smallEvent = { Event(id++, Duration(2), listOf()) }
         val longEvent = { Event(id++, Duration(10), listOf()) }
 
-        val timeSlotsConstraints = listOf(
+        val twoSlotsConstraints = listOf(
             TimeSlotsConstraint( // 0
                 listOf(
                     TimeStamp(0).during(Duration(10)),
@@ -64,70 +65,11 @@ class MatchingSolverTest {
                     TimeStamp(5).during(Duration(4)),
                     TimeStamp(20).during(Duration(15))
                 )
-            ),
-            TimeSlotsConstraint( // 2
-                listOf(
-                    TimeStamp(6).during(Duration(5)),
-                    TimeStamp(22).during(Duration(5))
-                )
-            ),
-            TimeSlotsConstraint( // 3
-                listOf(
-                    TimeStamp(0).during(Duration(8)),
-                    TimeStamp(24).during(Duration(10))
-                )
-            ),
-            TimeSlotsConstraint( // 4
-                listOf(
-                    TimeStamp(2).during(Duration(3)),
-                    TimeStamp(9).during(Duration(11))
-                )
             )
         )
-        checkSolver(listOf(smallEvent()), listOf(timeSlotsConstraints[0], timeSlotsConstraints[4]), true)
-        checkSolver(listOf(smallEvent(), smallEvent()), listOf(timeSlotsConstraints[0], timeSlotsConstraints[4]), false)
-        checkSolver(listOf(longEvent()), listOf(timeSlotsConstraints[0], timeSlotsConstraints[4]), false)
 
-        checkSolver(
-            listOf(smallEvent(), longEvent(), longEvent()),
-            listOf(timeSlotsConstraints[0], timeSlotsConstraints[1]),
-            false
-        )
-
-        checkSolver(listOf(smallEvent(), smallEvent()), listOf(timeSlotsConstraints[1], timeSlotsConstraints[2]), true)
-        checkSolver(
-            listOf(smallEvent(), smallEvent(), smallEvent()),
-            listOf(timeSlotsConstraints[1], timeSlotsConstraints[2]),
-            false
-        )
-        checkSolver(listOf(longEvent()), listOf(timeSlotsConstraints[1], timeSlotsConstraints[2]), false)
-
-        checkSolver(listOf(smallEvent(), smallEvent()), listOf(timeSlotsConstraints[1], timeSlotsConstraints[3]), true)
-        checkSolver(
-            listOf(smallEvent(), smallEvent(), smallEvent()),
-            listOf(timeSlotsConstraints[1], timeSlotsConstraints[3]),
-            false
-        )
-        checkSolver(listOf(smallEvent(), longEvent()), listOf(timeSlotsConstraints[1], timeSlotsConstraints[3]), true)
-
-        checkSolver(
-            listOf(smallEvent(), smallEvent()),
-            listOf(timeSlotsConstraints[1], timeSlotsConstraints[2], timeSlotsConstraints[3]),
-            true
-        )
-        checkSolver(
-            listOf(smallEvent(), smallEvent(), smallEvent()),
-            listOf(timeSlotsConstraints[1], timeSlotsConstraints[2], timeSlotsConstraints[3]),
-            false
-        )
-        checkSolver(listOf(longEvent()), listOf(timeSlotsConstraints[1], timeSlotsConstraints[2], timeSlotsConstraints[3]), false)
-
-        checkSolver(listOf(smallEvent()), listOf(timeSlotsConstraints[1], timeSlotsConstraints[4]), false)
-        checkSolver(listOf(longEvent()), listOf(timeSlotsConstraints[1], timeSlotsConstraints[4]), false)
-
-        checkSolver(listOf(smallEvent()), listOf(timeSlotsConstraints[3], timeSlotsConstraints[4]), true)
-        checkSolver(listOf(smallEvent(), smallEvent()), listOf(timeSlotsConstraints[3], timeSlotsConstraints[4]), false)
-        checkSolver(listOf(longEvent()), listOf(timeSlotsConstraints[3], timeSlotsConstraints[4]), false)
+        assertThrows<IllegalArgumentException> { checkSolver(listOf(smallEvent()), twoSlotsConstraints, true) }
+        assertThrows<IllegalArgumentException> { checkSolver(listOf(smallEvent(), longEvent()), listOf(), false) }
     }
 
     @Test
