@@ -5,8 +5,13 @@ import org.jgrapht.alg.matching.HopcroftKarpMaximumCardinalityBipartiteMatching
 import org.jgrapht.graph.DefaultUndirectedGraph
 import ru.hse.plameet.core.*
 import ru.hse.plameet.core.constraints.Constraint
-import ru.hse.plameet.core.constraints.SlotsConstraint
+import ru.hse.plameet.core.constraints.TimeSlotsConstraint
 
+/**
+ * Solver using classic pairing algorithm.
+ *
+ * Requires one TimeSlotsConstraint.
+ */
 class MatchingSolver private constructor(
     private val events: List<Event>,
     private val constraints: KnownConstraints,
@@ -52,22 +57,22 @@ class MatchingSolver private constructor(
     private data class IntEdge(val left: Int, val right: Int)
 
     private data class KnownConstraints(
-        val slots: SlotsConstraint
+        val slots: TimeSlotsConstraint
     )
 
     companion object : Solver {
         override fun solve(events: List<Event>, constraints: List<Constraint>): Schedule? {
-            val slots = mutableListOf<SlotsConstraint>()
+            val slots = mutableListOf<TimeSlotsConstraint>()
             for (constraint in constraints) {
                 when (constraint) {
-                    is SlotsConstraint -> slots.add(constraint)
+                    is TimeSlotsConstraint -> slots.add(constraint)
                 }
             }
 
             val slot = if (slots.isEmpty()) {
                 throw IllegalArgumentException("Must contain at least one slotsConstraint")
             } else {
-                SlotsConstraint.intersection(slots)
+                TimeSlotsConstraint.intersection(slots)
             }
 
             val knownConstraints = KnownConstraints(slot)

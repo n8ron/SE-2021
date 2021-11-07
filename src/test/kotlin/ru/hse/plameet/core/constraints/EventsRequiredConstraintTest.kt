@@ -8,12 +8,12 @@ import org.junit.jupiter.params.provider.MethodSource
 import ru.hse.plameet.core.*
 import java.util.stream.Stream
 
-object AllInConstraintTest {
+object EventsRequiredConstraintTest {
 
     @ParameterizedTest
     @MethodSource("provideCorrect")
     fun testCorrect(events: List<Event>, schedule: Schedule) {
-        assertTrue(AllInConstraint(events).isSatisfied(schedule))
+        assertTrue(EventsRequiredConstraint(events).isSatisfied(schedule))
     }
 
     @JvmStatic
@@ -54,7 +54,7 @@ object AllInConstraintTest {
     @ParameterizedTest
     @MethodSource("provideIncorrect")
     fun testIncorrect(events: List<Event>, schedule: Schedule) {
-        assertFalse(AllInConstraint(events).isSatisfied(schedule))
+        assertFalse(EventsRequiredConstraint(events).isSatisfied(schedule))
     }
 
     @JvmStatic
