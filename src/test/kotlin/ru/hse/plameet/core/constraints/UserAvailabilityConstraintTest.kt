@@ -9,11 +9,11 @@ import org.junit.jupiter.params.provider.MethodSource
 import ru.hse.plameet.core.*
 import java.util.stream.Stream
 
-object AvailabilityConstraintTest {
+object UserAvailabilityConstraintTest {
     @ParameterizedTest
     @MethodSource("provideCorrect")
     fun testCorrect(av: Map<User, List<TimeRange>>, schedules: List<Schedule>) {
-        val constraint = AvailabilityConstraint(av)
+        val constraint = UserAvailabilityConstraint(av)
         schedules.forEach { assertTrue(constraint.isSatisfied(it)) }
     }
 
@@ -44,7 +44,7 @@ object AvailabilityConstraintTest {
     @ParameterizedTest
     @MethodSource("provideIncorrect")
     fun testIncorrect(av: Map<User, List<TimeRange>>, schedules: List<Schedule>) {
-        val constraint = AvailabilityConstraint(av)
+        val constraint = UserAvailabilityConstraint(av)
         schedules.forEach { assertFalse(constraint.isSatisfied(it)) }
     }
 
@@ -82,7 +82,7 @@ object AvailabilityConstraintTest {
     @ParameterizedTest
     @MethodSource("provideConstructorThrows")
     fun testConstructorThrows(av: Map<User, List<TimeRange>>) {
-        assertThrows<IllegalArgumentException> { AvailabilityConstraint(av) }
+        assertThrows<IllegalArgumentException> { UserAvailabilityConstraint(av) }
     }
 
     @JvmStatic

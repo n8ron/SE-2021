@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test
 import ru.hse.plameet.core.*
 import kotlin.test.assertEquals
 
-class PreferConstraintsTest {
+class UserPreferConstraintsTest {
 
     @Test
     fun preferConstraintsTest() {
@@ -28,7 +28,7 @@ class PreferConstraintsTest {
             )
         )
 
-        val constraint = PreferConstraints(user2penalty)
+        val constraint = UserPreferConstraints(user2penalty)
 
         val events = listOf(
             Event(0, Duration(1), listOf(User(0))),

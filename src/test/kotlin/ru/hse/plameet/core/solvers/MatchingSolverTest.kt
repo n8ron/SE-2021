@@ -4,9 +4,9 @@ import org.junit.jupiter.api.Test
 import ru.hse.plameet.core.Duration
 import ru.hse.plameet.core.Event
 import ru.hse.plameet.core.TimeStamp
-import ru.hse.plameet.core.constraints.AllInConstraint
+import ru.hse.plameet.core.constraints.EventsRequiredConstraint
 import ru.hse.plameet.core.constraints.RequiredConstraint
-import ru.hse.plameet.core.constraints.SlotsConstraint
+import ru.hse.plameet.core.constraints.TimeSlotsConstraint
 import ru.hse.plameet.core.during
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
@@ -20,7 +20,7 @@ class MatchingSolverTest {
         val smallEvent = { Event(id++, Duration(2), listOf()) }
         val longEvent = { Event(id++, Duration(10), listOf()) }
 
-        val oneSlot = SlotsConstraint(
+        val oneSlot = TimeSlotsConstraint(
             listOf(TimeStamp(0).during(Duration(5)))
         )
         checkSolver(listOf(smallEvent()), listOf(oneSlot), true)
@@ -29,7 +29,7 @@ class MatchingSolverTest {
         checkSolver(listOf(longEvent()), listOf(oneSlot), false)
         checkSolver(listOf(longEvent(), longEvent()), listOf(oneSlot), false)
 
-        val multipleSlots = SlotsConstraint(
+        val multipleSlots = TimeSlotsConstraint(
             listOf(
                 TimeStamp(0).during(Duration(2)),
                 TimeStamp(5).during(Duration(4)),
@@ -51,83 +51,83 @@ class MatchingSolverTest {
         val smallEvent = { Event(id++, Duration(2), listOf()) }
         val longEvent = { Event(id++, Duration(10), listOf()) }
 
-        val slotsConstraints = listOf(
-            SlotsConstraint( // 0
+        val timeSlotsConstraints = listOf(
+            TimeSlotsConstraint( // 0
                 listOf(
                     TimeStamp(0).during(Duration(10)),
                     TimeStamp(20).during(Duration(10))
                 )
             ),
-            SlotsConstraint( // 1
+            TimeSlotsConstraint( // 1
                 listOf(
                     TimeStamp(0).during(Duration(2)),
                     TimeStamp(5).during(Duration(4)),
                     TimeStamp(20).during(Duration(15))
                 )
             ),
-            SlotsConstraint( // 2
+            TimeSlotsConstraint( // 2
                 listOf(
                     TimeStamp(6).during(Duration(5)),
                     TimeStamp(22).during(Duration(5))
                 )
             ),
-            SlotsConstraint( // 3
+            TimeSlotsConstraint( // 3
                 listOf(
                     TimeStamp(0).during(Duration(8)),
                     TimeStamp(24).during(Duration(10))
                 )
             ),
-            SlotsConstraint( // 4
+            TimeSlotsConstraint( // 4
                 listOf(
                     TimeStamp(2).during(Duration(3)),
                     TimeStamp(9).during(Duration(11))
                 )
             )
         )
-        checkSolver(listOf(smallEvent()), listOf(slotsConstraints[0], slotsConstraints[4]), true)
-        checkSolver(listOf(smallEvent(), smallEvent()), listOf(slotsConstraints[0], slotsConstraints[4]), false)
-        checkSolver(listOf(longEvent()), listOf(slotsConstraints[0], slotsConstraints[4]), false)
+        checkSolver(listOf(smallEvent()), listOf(timeSlotsConstraints[0], timeSlotsConstraints[4]), true)
+        checkSolver(listOf(smallEvent(), smallEvent()), listOf(timeSlotsConstraints[0], timeSlotsConstraints[4]), false)
+        checkSolver(listOf(longEvent()), listOf(timeSlotsConstraints[0], timeSlotsConstraints[4]), false)
 
         checkSolver(
             listOf(smallEvent(), longEvent(), longEvent()),
-            listOf(slotsConstraints[0], slotsConstraints[1]),
+            listOf(timeSlotsConstraints[0], timeSlotsConstraints[1]),
             false
         )
 
-        checkSolver(listOf(smallEvent(), smallEvent()), listOf(slotsConstraints[1], slotsConstraints[2]), true)
+        checkSolver(listOf(smallEvent(), smallEvent()), listOf(timeSlotsConstraints[1], timeSlotsConstraints[2]), true)
         checkSolver(
             listOf(smallEvent(), smallEvent(), smallEvent()),
-            listOf(slotsConstraints[1], slotsConstraints[2]),
+            listOf(timeSlotsConstraints[1], timeSlotsConstraints[2]),
             false
         )
-        checkSolver(listOf(longEvent()), listOf(slotsConstraints[1], slotsConstraints[2]), false)
+        checkSolver(listOf(longEvent()), listOf(timeSlotsConstraints[1], timeSlotsConstraints[2]), false)
 
-        checkSolver(listOf(smallEvent(), smallEvent()), listOf(slotsConstraints[1], slotsConstraints[3]), true)
+        checkSolver(listOf(smallEvent(), smallEvent()), listOf(timeSlotsConstraints[1], timeSlotsConstraints[3]), true)
         checkSolver(
             listOf(smallEvent(), smallEvent(), smallEvent()),
-            listOf(slotsConstraints[1], slotsConstraints[3]),
+            listOf(timeSlotsConstraints[1], timeSlotsConstraints[3]),
             false
         )
-        checkSolver(listOf(smallEvent(), longEvent()), listOf(slotsConstraints[1], slotsConstraints[3]), true)
+        checkSolver(listOf(smallEvent(), longEvent()), listOf(timeSlotsConstraints[1], timeSlotsConstraints[3]), true)
 
         checkSolver(
             listOf(smallEvent(), smallEvent()),
-            listOf(slotsConstraints[1], slotsConstraints[2], slotsConstraints[3]),
+            listOf(timeSlotsConstraints[1], timeSlotsConstraints[2], timeSlotsConstraints[3]),
             true
         )
         checkSolver(
             listOf(smallEvent(), smallEvent(), smallEvent()),
-            listOf(slotsConstraints[1], slotsConstraints[2], slotsConstraints[3]),
+            listOf(timeSlotsConstraints[1], timeSlotsConstraints[2], timeSlotsConstraints[3]),
             false
         )
-        checkSolver(listOf(longEvent()), listOf(slotsConstraints[1], slotsConstraints[2], slotsConstraints[3]), false)
+        checkSolver(listOf(longEvent()), listOf(timeSlotsConstraints[1], timeSlotsConstraints[2], timeSlotsConstraints[3]), false)
 
-        checkSolver(listOf(smallEvent()), listOf(slotsConstraints[1], slotsConstraints[4]), false)
-        checkSolver(listOf(longEvent()), listOf(slotsConstraints[1], slotsConstraints[4]), false)
+        checkSolver(listOf(smallEvent()), listOf(timeSlotsConstraints[1], timeSlotsConstraints[4]), false)
+        checkSolver(listOf(longEvent()), listOf(timeSlotsConstraints[1], timeSlotsConstraints[4]), false)
 
-        checkSolver(listOf(smallEvent()), listOf(slotsConstraints[3], slotsConstraints[4]), true)
-        checkSolver(listOf(smallEvent(), smallEvent()), listOf(slotsConstraints[3], slotsConstraints[4]), false)
-        checkSolver(listOf(longEvent()), listOf(slotsConstraints[3], slotsConstraints[4]), false)
+        checkSolver(listOf(smallEvent()), listOf(timeSlotsConstraints[3], timeSlotsConstraints[4]), true)
+        checkSolver(listOf(smallEvent(), smallEvent()), listOf(timeSlotsConstraints[3], timeSlotsConstraints[4]), false)
+        checkSolver(listOf(longEvent()), listOf(timeSlotsConstraints[3], timeSlotsConstraints[4]), false)
     }
 
     @Test
@@ -145,8 +145,8 @@ class MatchingSolverTest {
             }
         }
 
-        val slotsConstraint = listOf(
-            SlotsConstraint(
+        val timeSlotsConstraint = listOf(
+            TimeSlotsConstraint(
                 listOf(
                     TimeStamp(0).during(Duration(2)),
                     TimeStamp(5).during(Duration(4)),
@@ -154,11 +154,11 @@ class MatchingSolverTest {
                 )
             )
         )
-        checkSolver(smallEvents().take(3).toList(), slotsConstraint, true)
-        checkSolver(longEvents().take(1).toList(), slotsConstraint, true)
+        checkSolver(smallEvents().take(3).toList(), timeSlotsConstraint, true)
+        checkSolver(longEvents().take(1).toList(), timeSlotsConstraint, true)
 
-        checkSolver(smallEvents().take(4).toList(), slotsConstraint, false)
-        checkSolver(longEvents().take(2).toList(), slotsConstraint, false)
+        checkSolver(smallEvents().take(4).toList(), timeSlotsConstraint, false)
+        checkSolver(longEvents().take(2).toList(), timeSlotsConstraint, false)
     }
 
     private fun checkSolver(
@@ -166,13 +166,13 @@ class MatchingSolverTest {
         constraints: List<RequiredConstraint>,
         solvable: Boolean
     ) {
-        val allInConstraint = AllInConstraint(events)
-        val solution = MatchingSolver.solve(events, constraints + allInConstraint)
+        val eventsRequiredConstraint = EventsRequiredConstraint(events)
+        val solution = MatchingSolver.solve(events, constraints + eventsRequiredConstraint)
         if (solvable) {
             for (constraint in constraints) {
                 assertNotNull(solution)
                 assertTrue { constraint.isSatisfied(solution) }
-                assertTrue { allInConstraint.isSatisfied(solution) }
+                assertTrue { eventsRequiredConstraint.isSatisfied(solution) }
             }
         } else {
             assertNull(solution)

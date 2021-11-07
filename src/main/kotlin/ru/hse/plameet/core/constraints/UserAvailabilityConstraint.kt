@@ -2,7 +2,10 @@ package ru.hse.plameet.core.constraints
 
 import ru.hse.plameet.core.*
 
-class AvailabilityConstraint(av: Map<User, List<TimeRange>>) : RequiredConstraint {
+/**
+ * Constraint marks that user can participate in events only in provided time ranges
+ */
+class UserAvailabilityConstraint(av: Map<User, List<TimeRange>>) : RequiredConstraint {
 
     private val av = av.mapValues {
         it.value.sortedWith(
