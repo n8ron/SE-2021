@@ -7,7 +7,7 @@ import ru.hse.plameet.core.*
  */
 class UserAvailabilityConstraint(av: Map<User, List<TimeRange>>) : RequiredConstraint {
 
-    private val av = av.mapValues {
+    val av = av.mapValues {
         it.value.sortedWith(
             compareBy { r -> r.begin.units }
         )
