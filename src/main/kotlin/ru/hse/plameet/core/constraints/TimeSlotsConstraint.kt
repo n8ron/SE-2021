@@ -52,20 +52,4 @@ open class TimeSlotsConstraint(slots: List<TimeRange>) : RequiredConstraint {
 
         return true
     }
-
-    companion object {
-        fun intersection(slotsList: List<TimeSlotsConstraint>): TimeSlotsConstraint {
-            if (slotsList.isEmpty()) {
-                throw IllegalArgumentException("Intersection of empty list is undefined")
-            }
-            if (slotsList.size == 1) {
-                return slotsList.first()
-            }
-            var accum = intersectSorted(slotsList[0].sortedSlots, slotsList[1].sortedSlots)
-            for (i in 2 until slotsList.size) {
-                accum = intersectSorted(accum, slotsList[i].sortedSlots)
-            }
-            return TimeSlotsConstraint(accum)
-        }
-    }
 }

@@ -71,8 +71,10 @@ class MatchingSolver private constructor(
 
             val slot = if (slots.isEmpty()) {
                 throw IllegalArgumentException("Must contain at least one slotsConstraint")
+            } else if (slots.size > 1) {
+                throw IllegalArgumentException("Multiple TimeSlotsConstraint can't be merged automatically")
             } else {
-                TimeSlotsConstraint.intersection(slots)
+                slots.first()
             }
 
             val knownConstraints = KnownConstraints(slot)
