@@ -3,10 +3,7 @@ package ru.hse.plameet.core.solvers
 import org.jgrapht.alg.interfaces.MatchingAlgorithm
 import org.jgrapht.alg.matching.HopcroftKarpMaximumCardinalityBipartiteMatching
 import org.jgrapht.graph.DefaultUndirectedGraph
-import ru.hse.plameet.core.Event
-import ru.hse.plameet.core.Schedule
-import ru.hse.plameet.core.TimeRange
-import ru.hse.plameet.core.TimedEvent
+import ru.hse.plameet.core.*
 import ru.hse.plameet.core.constraints.Constraint
 import ru.hse.plameet.core.constraints.SlotsConstraint
 
@@ -46,15 +43,8 @@ class MatchingSolver private constructor(
             }
         }
 
-        val leftPartition = HashSet<Int>()
-        for (i in events.indices) {
-            leftPartition.add(i)
-        }
-
-        val rightPartition = HashSet<Int>()
-        for (i in slots.indices) {
-            rightPartition.add(events.size + i)
-        }
+        val leftPartition = RangeSet(0, events.size)
+        val rightPartition = RangeSet(events.size, events.size + slots.size)
 
         return HopcroftKarpMaximumCardinalityBipartiteMatching(graph, leftPartition, rightPartition).matching
     }
