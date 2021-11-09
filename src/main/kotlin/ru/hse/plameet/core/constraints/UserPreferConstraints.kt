@@ -4,7 +4,6 @@ import ru.hse.plameet.core.Schedule
 import ru.hse.plameet.core.TimeRange
 import ru.hse.plameet.core.User
 
-
 class UserPreferConstraints(av: Map<User, List<Pair<TimeRange, Double>>>) : Constraint {
     private val usersPriorities: MutableMap<User, List<Pair<TimeRange, Double>>> = HashMap()
 
