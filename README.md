@@ -69,7 +69,7 @@ val solution = MatchingSolver.solve(events, listOf(slots, availability, eventsRe
 solution:
 event0 at the TimeStamp(5)
 event1 at the TimeStamp(9)
-event2 at the TimeStamp(1 
+event2 at the TimeStamp(1)
  */
 ```
 
