@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "com.github.n8ron"
-version = "0.2.0"
+version = "0.2.1"
 
 repositories {
     mavenCentral()
@@ -25,7 +25,6 @@ jacoco {
 }
 
 tasks.test {
-    useJUnit()
     useJUnitPlatform()
     finalizedBy(tasks.jacocoTestReport)
 }

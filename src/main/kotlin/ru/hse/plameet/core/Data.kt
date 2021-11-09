@@ -29,3 +29,5 @@ fun TimeStamp.until(end: TimeStamp) = TimeRange(this, end)
 fun TimeStamp.during(duration: Duration) = TimeRange(this, this + duration)
 
 fun TimeRange.contains(other: TimeRange) = this.begin.units <= other.begin.units && other.end.units <= this.end.units
+
+fun TimedEvent.timeRange() = this.time.during(this.event.duration)
