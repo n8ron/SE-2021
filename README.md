@@ -85,7 +85,7 @@ It's a study project in HSE university for SE course. It is currently under deve
 - Valery Golovin (GitHub: vsgol)
 
 ## Acknowledgements
-Special thanks to our teachers!
+Special thanks to our SE course teachers!
 
 - Vladislav Tankov
 - Timofey Bryksin
