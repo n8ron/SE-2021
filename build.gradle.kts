@@ -24,7 +24,6 @@ jacoco {
 }
 
 tasks.test {
-    useJUnit()
     useJUnitPlatform()
     finalizedBy(tasks.jacocoTestReport)
 }

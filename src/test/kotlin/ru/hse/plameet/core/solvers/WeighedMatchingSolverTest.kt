@@ -1,10 +1,10 @@
 package ru.hse.plameet.core.solvers
 
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import ru.hse.plameet.core.*
 import ru.hse.plameet.core.constraints.*
+import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
