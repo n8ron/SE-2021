@@ -1,17 +1,14 @@
 package ru.hse.plameet.core.solvers
 
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import ru.hse.plameet.core.*
-import ru.hse.plameet.core.constraints.BooleanConstraint
-import ru.hse.plameet.core.constraints.EventsRequiredConstraint
-import ru.hse.plameet.core.constraints.TimeSlotsConstraint
-import ru.hse.plameet.core.constraints.UserAvailabilityConstraint
+import ru.hse.plameet.core.constraints.*
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
-import kotlin.test.assertTrue
 
-class MatchingSolverTest {
+class WeighedMatchingSolverTest {
 
     @Test
     fun slotsConstraintTest() {
@@ -143,19 +140,75 @@ class MatchingSolverTest {
         checkSolver(events, listOf(slots, availability3), false)
     }
 
+    @Test
+    fun testPreferConstraint() {
+        val users = listOf(User(0), User(1), User(2), User(3))
+        val events = listOf(
+            Event(0, Duration(1), listOf(users[0], users[1])),
+            Event(1, Duration(2), listOf(users[2], users[3])),
+            Event(2, Duration(2), listOf(users[0], users[2]))
+        )
+
+        val slots = TimeSlotsConstraint(listOf(TimeStamp(1), TimeStamp(5), TimeStamp(9)), Duration(2))
+
+        val prefer1 = UserPreferConstraints(
+            mapOf(
+                users[0] to listOf(
+                    slots.sortedSlots[0] to 1.0,
+                    slots.sortedSlots[1] to 5.0
+                ),
+                users[1] to listOf(
+                    slots.sortedSlots[2] to 3.0
+                ),
+                users[2] to listOf(
+                    slots.sortedSlots[0] to 5.0,
+                    slots.sortedSlots[2] to 1.0
+                ),
+                users[3] to listOf(
+                    slots.sortedSlots[2] to 1.0
+                )
+            )
+        )
+        checkSolver(events, listOf(slots, prefer1), true, 2.0)
+
+        val prefer2 = UserPreferConstraints(
+            mapOf(
+                users[0] to listOf(
+                    slots.sortedSlots[0] to 1.0,
+                    slots.sortedSlots[1] to 5.0,
+                    slots.sortedSlots[2] to 3.0
+                ),
+                users[1] to listOf(
+                    slots.sortedSlots[0] to 1.0,
+                    slots.sortedSlots[1] to 5.0,
+                    slots.sortedSlots[2] to 2.0
+                ),
+                users[2] to listOf(
+                    slots.sortedSlots[0] to 1.0,
+                    slots.sortedSlots[1] to 5.0,
+                    slots.sortedSlots[2] to 3.0
+                ),
+                users[3] to listOf(
+                    slots.sortedSlots[0] to 1.0,
+                    slots.sortedSlots[1] to 5.0,
+                    slots.sortedSlots[2] to 3.0
+                )
+            )
+        )
+        checkSolver(events, listOf(slots, prefer2), true, 17.0)
+    }
+
     private fun checkSolver(
         events: List<Event>,
-        constraints: List<BooleanConstraint>,
-        solvable: Boolean
+        constraints: List<Constraint>,
+        solvable: Boolean,
+        penalty: Double = 0.0
     ) {
         val eventsRequiredConstraint = EventsRequiredConstraint(events)
-        val solution = MatchingSolver.solve(events, constraints + eventsRequiredConstraint)
+        val solution = WeighedMatchingSolver.solve(events, constraints + eventsRequiredConstraint)
         if (solvable) {
             assertNotNull(solution)
-            for (constraint in constraints) {
-                assertTrue { constraint.isSatisfied(solution) }
-                assertTrue { eventsRequiredConstraint.isSatisfied(solution) }
-            }
+            assertEquals(penalty, constraints.sumOf { it.calcPenalty(solution) })
         } else {
             assertNull(solution)
         }
