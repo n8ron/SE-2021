@@ -1,4 +1,6 @@
 # plameet
+[![Validate Kotlin Code](https://github.com/n8ron/SE-2021/actions/workflows/main.yml/badge.svg)](https://github.com/n8ron/SE-2021/actions/workflows/build.yml) 
+[![License](https://img.shields.io/github/license/n8ron/SE-2021.svg)](https://img.shields.io/github/license/n8ron/SE-2021)
 
 Plameet is a Kotlin library, which helps to make a schedule that takes into account the constraints imposed by the user
 
