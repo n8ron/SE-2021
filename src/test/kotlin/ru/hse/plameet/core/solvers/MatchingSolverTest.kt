@@ -112,28 +112,34 @@ class MatchingSolverTest {
 
         val slots = TimeSlotsConstraint(listOf(TimeStamp(1), TimeStamp(5), TimeStamp(9)), Duration(2))
 
-        val availability1 = UserAvailabilityConstraint(mapOf(
-            users[0] to listOf(slots.sortedSlots[0], slots.sortedSlots[1]),
-            users[1] to listOf(slots.sortedSlots[1]),
-            users[2] to listOf(slots.sortedSlots[0], slots.sortedSlots[2]),
-            users[3] to listOf(slots.sortedSlots[2])
-        ))
+        val availability1 = UserAvailabilityConstraint(
+            mapOf(
+                users[0] to listOf(slots.sortedSlots[0], slots.sortedSlots[1]),
+                users[1] to listOf(slots.sortedSlots[1]),
+                users[2] to listOf(slots.sortedSlots[0], slots.sortedSlots[2]),
+                users[3] to listOf(slots.sortedSlots[2])
+            )
+        )
         checkSolver(events, listOf(slots, availability1), true)
 
-        val availability2 = UserAvailabilityConstraint(mapOf(
-            users[0] to listOf(slots.sortedSlots[0], slots.sortedSlots[1]),
-            users[1] to listOf(slots.sortedSlots[1]),
-            users[2] to listOf(slots.sortedSlots[0], slots.sortedSlots[1]),
-            users[3] to listOf(slots.sortedSlots[2])
-        ))
+        val availability2 = UserAvailabilityConstraint(
+            mapOf(
+                users[0] to listOf(slots.sortedSlots[0], slots.sortedSlots[1]),
+                users[1] to listOf(slots.sortedSlots[1]),
+                users[2] to listOf(slots.sortedSlots[0], slots.sortedSlots[1]),
+                users[3] to listOf(slots.sortedSlots[2])
+            )
+        )
         checkSolver(events, listOf(slots, availability2), false)
 
-        val availability3 = UserAvailabilityConstraint(mapOf(
-            users[0] to listOf(slots.sortedSlots[0], slots.sortedSlots[1]),
-            users[1] to listOf(slots.sortedSlots[0]),
-            users[2] to listOf(slots.sortedSlots[0], slots.sortedSlots[2]),
-            users[3] to listOf(slots.sortedSlots[2])
-        ))
+        val availability3 = UserAvailabilityConstraint(
+            mapOf(
+                users[0] to listOf(slots.sortedSlots[0], slots.sortedSlots[1]),
+                users[1] to listOf(slots.sortedSlots[0]),
+                users[2] to listOf(slots.sortedSlots[0], slots.sortedSlots[2]),
+                users[3] to listOf(slots.sortedSlots[2])
+            )
+        )
         checkSolver(events, listOf(slots, availability3), false)
     }
 
