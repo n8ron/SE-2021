@@ -76,9 +76,19 @@ event2 at the TimeStamp(1)
 ## Contributing
 Pull requests are welcome. Thank you for your suggestions!
 
+## Project status
+It's a study project in HSE university for SE course. It is currently under development. 
+
 ## Authors
 - Nikita Abramov (GitHub: n8ron)
 - Roman Venediktov (GitHub: e2e4b6b7)
 - Valery Golovin (GitHub: vsgol)
+
+## Acknowledgements
+Special thanks to our teachers!
+
+- Vladislav Tankov
+- Timofey Bryksin
+
 ## License
 [Eclipse Public License 2.0](https://www.eclipse.org/legal/epl-2.0/)
