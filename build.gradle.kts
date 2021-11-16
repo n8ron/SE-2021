@@ -46,3 +46,9 @@ ktlint {
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "11"
 }
+
+val jar by tasks.getting(Jar::class) {
+    manifest {
+        attributes["Main-Class"] = "ru.hse.plameet.core.MainKt"
+    }
+}

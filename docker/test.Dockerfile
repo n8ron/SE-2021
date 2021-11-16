@@ -1,4 +1,4 @@
 FROM gradle:6-jdk11-alpine AS plameet_test
 WORKDIR /home/gradle/build
-ADD . .
+COPY . .
 RUN gradle test -x check --no-daemon
