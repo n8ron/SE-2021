@@ -1,19 +1,19 @@
 package ru.hse.plameet.core.constraints
 
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import ru.hse.plameet.core.*
 import java.util.stream.Stream
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
-object AvailabilityConstraintTest {
+object UserAvailabilityConstraintTest {
     @ParameterizedTest
     @MethodSource("provideCorrect")
     fun testCorrect(av: Map<User, List<TimeRange>>, schedules: List<Schedule>) {
-        val constraint = AvailabilityConstraint(av)
+        val constraint = UserAvailabilityConstraint(av)
         schedules.forEach { assertTrue(constraint.isSatisfied(it)) }
     }
 
@@ -44,7 +44,7 @@ object AvailabilityConstraintTest {
     @ParameterizedTest
     @MethodSource("provideIncorrect")
     fun testIncorrect(av: Map<User, List<TimeRange>>, schedules: List<Schedule>) {
-        val constraint = AvailabilityConstraint(av)
+        val constraint = UserAvailabilityConstraint(av)
         schedules.forEach { assertFalse(constraint.isSatisfied(it)) }
     }
 
@@ -82,7 +82,7 @@ object AvailabilityConstraintTest {
     @ParameterizedTest
     @MethodSource("provideConstructorThrows")
     fun testConstructorThrows(av: Map<User, List<TimeRange>>) {
-        assertThrows<IllegalArgumentException> { AvailabilityConstraint(av) }
+        assertThrows<IllegalArgumentException> { UserAvailabilityConstraint(av) }
     }
 
     @JvmStatic

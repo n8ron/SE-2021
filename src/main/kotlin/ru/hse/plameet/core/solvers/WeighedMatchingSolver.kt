@@ -1,25 +1,26 @@
 package ru.hse.plameet.core.solvers
 
 import org.jgrapht.alg.interfaces.MatchingAlgorithm
-import org.jgrapht.alg.matching.HopcroftKarpMaximumCardinalityBipartiteMatching
-import org.jgrapht.graph.DefaultUndirectedGraph
+import org.jgrapht.alg.matching.MaximumWeightBipartiteMatching
+import org.jgrapht.graph.DefaultUndirectedWeightedGraph
 import ru.hse.plameet.core.*
 import ru.hse.plameet.core.constraints.Constraint
 import ru.hse.plameet.core.constraints.TimeSlotsConstraint
 import ru.hse.plameet.core.constraints.UserAvailabilityConstraint
+import ru.hse.plameet.core.constraints.UserPreferConstraints
 
 /**
- * Solver using classic pairing algorithm.
+ * Solver using min-cost pairing algorithm.
  *
  * Requires one TimeSlotsConstraint.
  * Supports one UserAvailabilityConstraint.
+ * Supports one UserPreferConstraint.
  */
-class MatchingSolver private constructor(
+class WeighedMatchingSolver private constructor(
     private val events: List<Event>,
     private val constraints: KnownConstraints,
     private val allConstraints: List<Constraint>
 ) {
-
     private fun solve(): Schedule? {
         val slots = constraints.slots.sortedSlots
 
@@ -37,7 +38,7 @@ class MatchingSolver private constructor(
     }
 
     private fun buildMatching(slots: List<TimeRange>): MatchingAlgorithm.Matching<Int, IntEdge> {
-        val graph = DefaultUndirectedGraph<Int, IntEdge>(null, null, false)
+        val graph = DefaultUndirectedWeightedGraph<Int, IntEdge>(null, null)
         for (i in 0 until events.size + slots.size) {
             graph.addVertex(i)
         }
@@ -45,15 +46,31 @@ class MatchingSolver private constructor(
         events.forEachIndexed { i, event ->
             slots.forEachIndexed { j, slot ->
                 if (canMatch(event, slot)) {
-                    graph.addEdge(i, events.size + j, IntEdge(i, j))
+                    val edge = IntEdge(i, j)
+                    graph.addEdge(i, events.size + j, edge)
+                    graph.setEdgeWeight(
+                        edge,
+                        -(constraints.prefer?.calcPenaltyEvent(TimedEvent(event, slot.begin)) ?: 0.0)
+                    )
                 }
             }
+        }
+
+        if (graph.edgeSet().size == 0) {
+            return MatchingAlgorithm.MatchingImpl(graph, emptySet(), .0)
+        }
+
+        val maxPenalty = -graph.edgeSet().minOf { graph.getEdgeWeight(it) }
+        val eventWeight = 1.0 + maxPenalty * minOf(slots.size, events.size)
+
+        graph.edgeSet().forEach {
+            graph.setEdgeWeight(it, eventWeight + graph.getEdgeWeight(it))
         }
 
         val leftPartition = RangeSet(0, events.size)
         val rightPartition = RangeSet(events.size, events.size + slots.size)
 
-        return HopcroftKarpMaximumCardinalityBipartiteMatching(graph, leftPartition, rightPartition).matching
+        return MaximumWeightBipartiteMatching(graph, leftPartition, rightPartition).matching
     }
 
     private fun canMatch(event: Event, slot: TimeRange): Boolean {
@@ -72,17 +89,20 @@ class MatchingSolver private constructor(
 
     private data class KnownConstraints(
         val slots: TimeSlotsConstraint,
-        val availability: UserAvailabilityConstraint?
+        val availability: UserAvailabilityConstraint?,
+        val prefer: UserPreferConstraints?
     )
 
     companion object : Solver {
         override fun solve(events: List<Event>, constraints: List<Constraint>): Schedule? {
             val slots = mutableListOf<TimeSlotsConstraint>()
             val availabilities = mutableListOf<UserAvailabilityConstraint>()
+            val prefers = mutableListOf<UserPreferConstraints>()
             for (constraint in constraints) {
                 when (constraint) {
                     is TimeSlotsConstraint -> slots.add(constraint)
                     is UserAvailabilityConstraint -> availabilities.add(constraint)
+                    is UserPreferConstraints -> prefers.add(constraint)
                 }
             }
 
@@ -104,8 +124,16 @@ class MatchingSolver private constructor(
                 else -> null
             }
 
-            val knownConstraints = KnownConstraints(slot, availability)
-            return MatchingSolver(events, knownConstraints, constraints).solve()
+            val prefer = when {
+                prefers.size > 1 -> {
+                    throw IllegalArgumentException("Merging UserPreferConstraints is not yet implemented")
+                }
+                prefers.size == 1 -> prefers.first()
+                else -> null
+            }
+
+            val knownConstraints = KnownConstraints(slot, availability, prefer)
+            return WeighedMatchingSolver(events, knownConstraints, constraints).solve()
         }
     }
 }

@@ -2,7 +2,15 @@ package ru.hse.plameet.core.constraints
 
 import ru.hse.plameet.core.*
 
-open class SlotsConstraint(slots: List<TimeRange>) : RequiredConstraint {
+/**
+ * Constraint marking that each event must be places in one of time slots and only one event per slot
+ */
+open class TimeSlotsConstraint(slots: List<TimeRange>) : RequiredConstraint {
+
+    /**
+     * Constructs slots of equal sizes
+     */
+    constructor(slots: List<TimeStamp>, duration: Duration) : this(slots.map { it.during(duration) })
 
     internal val sortedSlots =
         slots.sortedWith(
@@ -43,21 +51,5 @@ open class SlotsConstraint(slots: List<TimeRange>) : RequiredConstraint {
         }
 
         return true
-    }
-
-    companion object {
-        fun intersection(slotsList: List<SlotsConstraint>): SlotsConstraint {
-            if (slotsList.isEmpty()) {
-                throw IllegalArgumentException("Intersection of empty list is undefined")
-            }
-            if (slotsList.size == 1) {
-                return slotsList.first()
-            }
-            var accum = intersectSorted(slotsList[0].sortedSlots, slotsList[1].sortedSlots)
-            for (i in 2 until slotsList.size) {
-                accum = intersectSorted(accum, slotsList[i].sortedSlots)
-            }
-            return SlotsConstraint(accum)
-        }
     }
 }

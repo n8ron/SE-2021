@@ -4,10 +4,11 @@ plugins {
     kotlin("jvm") version "1.5.31"
     id("org.jlleitschuh.gradle.ktlint") version "10.2.0"
     jacoco
+    maven
 }
 
-group = "ru.hse"
-version = "0.0.0"
+group = "com.github.n8ron"
+version = "0.2.1"
 
 repositories {
     mavenCentral()

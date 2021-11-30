@@ -10,7 +10,7 @@ class TimetableConstraintTest {
 
     @Test
     fun timetableConstraintTest() {
-        val constraint = TimetableConstraint(
+        val constraint = TimeSlotsConstraint(
             listOf(0, 5, 10, 20, 25, 41).map { TimeStamp(it) },
             Duration(3)
         )
@@ -111,28 +111,28 @@ class TimetableConstraintTest {
         assertFalse { constraint.isSatisfied(incorrectSchedule) }
 
         assertThrows<IllegalStateException> {
-            TimetableConstraint(
+            TimeSlotsConstraint(
                 listOf(0, 5, 10, 13).map { TimeStamp(it) },
                 Duration(3)
             )
         }
 
         assertThrows<IllegalStateException> {
-            TimetableConstraint(
+            TimeSlotsConstraint(
                 listOf(0, 2).map { TimeStamp(it) },
                 Duration(5)
             )
         }
 
         assertThrows<IllegalStateException> {
-            TimetableConstraint(
+            TimeSlotsConstraint(
                 listOf(0, 0).map { TimeStamp(it) },
                 Duration(5)
             )
         }
 
         assertThrows<IllegalStateException> {
-            TimetableConstraint(
+            TimeSlotsConstraint(
                 listOf(0, 11, 23, 9).map { TimeStamp(it) },
                 Duration(10)
             )

@@ -8,7 +8,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-class SlotsConstraintsTest {
+class TimeSlotsConstraintsTest {
 
     @Test
     fun slotsConstraintIsSatisfiedTest() {
@@ -19,7 +19,7 @@ class SlotsConstraintsTest {
             TimeStamp(10).during(Duration(1))
         )
 
-        val constraint = SlotsConstraint(slots)
+        val constraint = TimeSlotsConstraint(slots)
 
         val emptySchedule = Schedule(listOf())
         assertTrue { constraint.isSatisfied(emptySchedule) }
@@ -76,7 +76,7 @@ class SlotsConstraintsTest {
             TimeStamp(10).during(Duration(1))
         )
 
-        val constraint = SlotsConstraint(slots)
+        val constraint = TimeSlotsConstraint(slots)
 
         var scheduleWithIntersections = Schedule(
             listOf(
@@ -118,7 +118,7 @@ class SlotsConstraintsTest {
             TimeStamp(0).during(Duration(2)),
             TimeStamp(2).during(Duration(1)),
         )
-        assertThrows<IllegalStateException> { SlotsConstraint(intersectSlots) }
+        assertThrows<IllegalStateException> { TimeSlotsConstraint(intersectSlots) }
 
         intersectSlots = listOf(
             TimeStamp(0).during(Duration(2)),
@@ -126,7 +126,7 @@ class SlotsConstraintsTest {
             TimeStamp(7).during(Duration(1)),
             TimeStamp(3).during(Duration(1))
         )
-        assertThrows<IllegalStateException> { SlotsConstraint(intersectSlots) }
+        assertThrows<IllegalStateException> { TimeSlotsConstraint(intersectSlots) }
 
         intersectSlots = listOf(
             TimeStamp(0).during(Duration(2)),
@@ -135,7 +135,7 @@ class SlotsConstraintsTest {
             TimeStamp(3).during(Duration(1))
         )
 
-        assertThrows<IllegalStateException> { SlotsConstraint(intersectSlots) }
+        assertThrows<IllegalStateException> { TimeSlotsConstraint(intersectSlots) }
 
         val correctSlots = listOf(
             TimeStamp(0).during(Duration(2)),
@@ -144,7 +144,7 @@ class SlotsConstraintsTest {
             TimeStamp(11).during(Duration(2)),
         )
 
-        assertDoesNotThrow { SlotsConstraint(correctSlots) }
+        assertDoesNotThrow { TimeSlotsConstraint(correctSlots) }
     }
 
     @Test
@@ -156,7 +156,7 @@ class SlotsConstraintsTest {
             TimeStamp(13).during(Duration(1))
         )
 
-        val constraint = SlotsConstraint(slots)
+        val constraint = TimeSlotsConstraint(slots)
 
         var incorrectSchedule = Schedule(
             listOf(
@@ -200,7 +200,7 @@ class SlotsConstraintsTest {
             TimeStamp(17).during(Duration(2))
         )
 
-        val constraint = SlotsConstraint(slots)
+        val constraint = TimeSlotsConstraint(slots)
 
         val correctSchedule = Schedule(
             listOf(
