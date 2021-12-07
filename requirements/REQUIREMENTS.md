@@ -30,7 +30,7 @@ Event participants can sign in, import theirs events from different calendars
 
 ## Job Story
 
-- When I organize an event, I want to get information when they can attend it, so I can reduce time spent on personal communication
+- When I organize an event, I want to get information when participants can attend it, so I can reduce time spent on personal communication
 
 - When I agree on a series of events, I want to automatically determine the optimal time, so I can reduce time spent on the thought process and minimize the risk of mistakes
 
