@@ -5,9 +5,9 @@
 The event manager can sign in, create and edit event with conditions of its holding, send invitations to the participants,
 get the optimal time for the event, export the event to a calendar
 
-### Participant at the event
+### Event participant 
 
-Event participants can sign in, upload theirs events from different calendars
+Event participants can sign in, import theirs events from different calendars
 (e.g. Google Calendar), add and edit constraints, receive invitations, and export events to a calendar
 
 ## User Case Diagram
@@ -23,10 +23,10 @@ Event participants can sign in, upload theirs events from different calendars
 
 - As an event manager, I want to automatically receive the most suitable time for the event,
   so that I do not manually take into account the conditions from each of the event participants
-  and do not waste a lot of time on it.
+  and reduce time spent on this process.
 
-- As a participant at the event, I want to automatically add my free time from other calendars, so as
-  not to manually transfer data from different calendars
+- As an event participant, I want to semi-automatically add my busy time from other calendars, so as
+  not to manually transfer data from different calendars.
 
 ## Job Story
 
