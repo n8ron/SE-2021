@@ -19,3 +19,25 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - FlowSolver
+
+## [0.3.0]
+
+### Added
+- Initial application with GUI for library functions
+
+## [0.4.0]
+
+### Added
+- Support for events with multiple users
+- Invitation links for event participants
+
+## [0.5.0]
+
+### Added
+- Login and user accounts
+- Support for importing events from Google Calendar and automatically marking times as engaged
+
+## [0.5.1]
+
+### Added
+- Export finalized events to Google Calendar
